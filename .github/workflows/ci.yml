@@ -1,0 +1,51 @@
+name: Build and test
+on: [push, pull_request, workflow_dispatch]
+permissions:
+  contents: read
+jobs:
+  portable:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: '8.0.x'
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - run: dotnet run --project tests/Companion.Launcher.Tests -c Release
+      - run: dotnet run --project tests/Companion.Launcher.Portable.Tests -c Release -- --output build/portable-ci
+      - run: dotnet build samples/Companion.Desktop -c Release
+      - run: python -m unittest discover -s tests -p test_generator.py
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: portable-checks-${{ matrix.os }}
+          path: build/portable-ci/*.png
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: '8.0.x'
+      - run: dotnet build samples/Companion.Demo -c Release
+      - run: dotnet run --project tests/Companion.Launcher.Windows.Tests -c Release -- --output build/windows-ci
+  android:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: '10.0.x'
+      - run: dotnet workload install android
+      - name: Build Android ARM64 sample
+        run: dotnet build samples/Companion.Android -c Release -p:RuntimeIdentifier=android-arm64 -p:AndroidSdkDirectory="$ANDROID_HOME" -p:JavaSdkDirectory="$JAVA_HOME_21_X64"
+      - uses: actions/upload-artifact@v7
+        with:
+          name: android-arm64-demo
+          path: samples/Companion.Android/bin/Release/net10.0-android/android-arm64/*-Signed.apk

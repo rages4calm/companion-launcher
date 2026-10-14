@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework><ImplicitUsings>enable</ImplicitUsings><Nullable>enable</Nullable>
+    <Version>0.2.0</Version><PackageId>Companion.Launcher.Avalonia</PackageId>
+    <Authors>Carl Prewitt Jr.</Authors><PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <Description>Reusable Companion UI for Linux, macOS and Android with per-game adapters.</Description>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../Companion.Launcher.Core/Companion.Launcher.Core.csproj" />
+    <PackageReference Include="Avalonia" Version="12.1.4" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="12.1.4" />
+    <PackageReference Include="Avalonia.Fonts.Inter" Version="12.1.4" />
+    <None Include="../../README.md" Pack="true" PackagePath="/" />
+  </ItemGroup>
+</Project>

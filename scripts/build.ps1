@@ -32,6 +32,10 @@ try {
     if ($LASTEXITCODE -ne 0) { throw 'Core package failed.' }
     & dotnet pack src/Companion.Launcher.Windows/Companion.Launcher.Windows.csproj -c $Configuration -o packages
     if ($LASTEXITCODE -ne 0) { throw 'Windows package failed.' }
+    & dotnet pack src/Companion.Launcher.Avalonia/Companion.Launcher.Avalonia.csproj -c $Configuration -o packages
+    if ($LASTEXITCODE -ne 0) { throw 'Portable package failed.' }
+    & dotnet run --project tests/Companion.Launcher.Portable.Tests -c $Configuration
+    if ($LASTEXITCODE -ne 0) { throw 'Portable UI checks failed.' }
     $consumerOutput = @(& python scripts/verify_consumers.py)
     if ($LASTEXITCODE -ne 0) { throw 'Pinned-package consumer proof failed.' }
     $consumerResult = ($consumerOutput -join [Environment]::NewLine) | ConvertFrom-Json

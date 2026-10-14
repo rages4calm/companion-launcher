@@ -2,7 +2,7 @@
 
 This directory is a separate local source project. It must not modify installed games,
 their saves/settings, or sibling projects as part of builds, smoke tests or generation.
-Secret of the Stars remains paused until its owner explicitly resumes that project.
+Do not resume unrelated game maintenance as part of shared-toolkit work.
 
 Keep the core independent of GUI and engine dependencies. Game setup, ROM validation,
 native binary settings, input bindings, asset formats and save compatibility belong to

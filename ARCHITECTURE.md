@@ -30,8 +30,8 @@ Game gameplay events --> CompanionAchievements C core --> transactional game wri
 - Windows page rendering and draft safety smoke checks.
 
 The core does not depend on WinForms, Avalonia, SDL, a ROM, an emulator or an engine.
-The Windows shell is a replaceable host. The `ProcessGameRuntime` helper is appropriate
-for desktop processes; Android JNI launch requires a different platform host.
+The Windows/portable shells is a replaceable host. The `ProcessGameRuntime` helper is appropriate
+for desktop processes; Android uses the injected in-package activity launch service.
 
 ## Adapter owns the game's behavior
 
@@ -65,7 +65,7 @@ staging/validation/commit remain the adapter's responsibility.
 
 ## Versions
 
-Core and Windows packages are initially pinned to 0.1.0. Consumers include exact-version
+Shared packages are pinned to 0.2.0. Consumers include exact-version
 NuGet references and a restore lock file. Fixes are implemented here, tested with consumers,
 packed as a new version and deliberately adopted. Do not silently overwrite an installed
 game's launcher merely because a shared package changed.

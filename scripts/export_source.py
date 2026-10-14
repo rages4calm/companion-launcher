@@ -8,8 +8,8 @@ from pathlib import Path
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
-ROOT_FILES = [".gitignore", ".gitattributes", "VERSION", "LICENSE", "AGENTS.md", "README.md", "ARCHITECTURE.md", "ADAPTER-GUIDE.md", "PROVENANCE.md"]
-EXTENSIONS = {".cs", ".csproj", ".json", ".py", ".ps1"}
+ROOT_FILES = [".gitignore", ".gitattributes", "VERSION", "LICENSE", "AGENTS.md", "README.md", "ARCHITECTURE.md", "ADAPTER-GUIDE.md", "PROVENANCE.md", "PLATFORMS.md", "CONTRIBUTING.md", "CHANGELOG.md"]
+EXTENSIONS = {".cs", ".csproj", ".json", ".py", ".ps1", ".xml", ".yml"}
 
 
 def digest(data: bytes) -> str:
@@ -28,7 +28,7 @@ def archive(path: Path, payloads: dict[str, bytes]) -> None:
 def export() -> dict:
     version = (ROOT / "VERSION").read_text().strip()
     sources = [ROOT / name for name in ROOT_FILES]
-    for directory in ("src", "samples", "tests", "scripts"):
+    for directory in ("src", "samples", "tests", "scripts", ".github"):
         sources.extend(p for p in (ROOT / directory).rglob("*") if p.is_file() and not p.is_symlink()
                        and not any(part in ("bin", "obj", "__pycache__") for part in p.relative_to(ROOT).parts)
                        and p.suffix in EXTENSIONS)
@@ -41,7 +41,7 @@ def export() -> dict:
     source_zip = output / f"CompanionLauncher-{version}-source.zip"
     archive(source_zip, payloads)
     packages = {}
-    for name in ("Companion.Launcher.Core", "Companion.Launcher.Windows"):
+    for name in ("Companion.Launcher.Core", "Companion.Launcher.Windows", "Companion.Launcher.Avalonia"):
         package = ROOT / "packages" / f"{name}.{version}.nupkg"
         packages[package.name] = package.read_bytes()
     package_zip = output / f"CompanionLauncher-{version}-packages.zip"

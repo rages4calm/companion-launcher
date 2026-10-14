@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources><style name="CompanionTheme" parent="Theme.AppCompat.NoActionBar"><item name="android:windowLightStatusBar">false</item><item name="android:colorAccent">#AD8DFF</item><item name="android:windowBackground">#10121A</item></style></resources>

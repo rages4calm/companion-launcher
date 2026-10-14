@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0-android</TargetFramework><SupportedOSPlatformVersion>26.0</SupportedOSPlatformVersion>
+    <ImplicitUsings>enable</ImplicitUsings><Nullable>enable</Nullable><Version>0.2.0</Version>
+    <PackageId>Companion.Launcher.Android</PackageId><Authors>Carl Prewitt Jr.</Authors>
+    <Description>Android activity launch bridge for Companion Launcher game adapters.</Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression><PackageReadmeFile>README.md</PackageReadmeFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../Companion.Launcher.Core/Companion.Launcher.Core.csproj" />
+    <None Include="../../README.md" Pack="true" PackagePath="/" />
+  </ItemGroup>
+</Project>

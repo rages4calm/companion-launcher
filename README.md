@@ -1,80 +1,107 @@
 # Companion Launcher
 
-A shared launcher foundation for Carl's native game projects. The interface, settings
-pages, profiles, launch handling and achievement browser live here once. Each game
-supplies a small adapter for its engine and branding.
+[![Build and test](https://github.com/rages4calm/companion-launcher/actions/workflows/ci.yml/badge.svg)](https://github.com/rages4calm/companion-launcher/actions/workflows/ci.yml)
 
-**Version 0.1.0** includes a portable .NET core, the familiar Windows Companion shell,
-two local NuGet packages, a new-game generator and a runnable synthetic demo.
-The source is MIT licensed. No ROM, game engine or game assets are included.
+A reusable, offline launcher for native games. Share the settings UI, profiles,
+setup workflow and achievement browser; keep each game's engine rules in a small
+adapter. Built from the Companion launcher used by EarthBound and Zelda ports.
 
-## Try it
+**MIT licensed. No ROMs, games, artwork, music or user saves are included.**
 
-The built demo is `samples/Companion.Demo/bin/Release/net8.0-windows/Companion.Demo.exe`.
-It shows configurable pages, separate profiles and the sibling achievement toolkit's
-earned/partial/locked example. Play runs a tiny process fixture and writes a receipt;
-it does not run a game. Demo settings use their own `CompanionTemplateDemo` data root.
+## Platforms
 
-To rebuild on Windows with the .NET 8 SDK or newer and Python 3.10+:
+| Platform | Host | Requirements |
+| --- | --- | --- |
+| Windows | Existing Windows Forms shell | .NET 8; existing interface retained |
+| Linux | Avalonia desktop shell | .NET 8; X11/XWayland and desktop graphics libraries |
+| macOS | Avalonia desktop shell | .NET 8; Intel or Apple Silicon |
+| Android | Avalonia single-view host + activity bridge | Android 8/API 26+; ARM64 or x64; .NET 10 Android workload to build |
 
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\build.ps1
+Version **0.2.0** adds the portable host alongside Windows Forms. Windows users
+keep the same launcher interface. Every host uses the same core settings and
+achievement contracts. Existing game installations are not migrated by this SDK.
+See [platform details and testing limits](PLATFORMS.md).
+
+## Run an example
+
+Desktop (Linux, macOS or Windows), with .NET 8 SDK or newer:
+
+```sh
+dotnet run --project samples/Companion.Desktop -c Release
 ```
 
-That command checks the core, generator and real Windows buttons, renders the demo,
-builds two independent consumers and packs **Core** and **Windows** into `packages`.
-It only starts synthetic process fixtures and writes isolated test data. Receipts and
-versioned source/package ZIPs go in `dist`. For a separate visual smoke test:
+Windows Forms example:
 
 ```powershell
-& .\samples\Companion.Demo\bin\Release\net8.0-windows\Companion.Demo.exe --smoke-test C:\Temp\CompanionDemo-fresh
+dotnet run --project samples/Companion.Demo -c Release
 ```
 
-The output directory must not exist. The receipt distinguishes rendered pages from
-gameplay. Setup and quick-save resume are optional adapter capabilities; the ordinary
-demo does not declare them. The separate Windows probe verifies both with synthetic
-callbacks and an actual child process, including cancellation and refreshed settings.
-They are not claims of a generic ROM converter or save format.
+The examples use synthetic settings and achievements. Run their setup, then Play
+to exercise a tiny process/activity fixture. They are not game ports.
 
-## Start the next game
+Android requires the .NET 10 Android workload, Android SDK and JDK 21:
 
-```powershell
-python .\scripts\new_game.py --id my-next-game --title "My Next Game" --output "..\My Next Game Companion"
-dotnet build "..\My Next Game Companion\Game.Companion.csproj" -c Release
+```sh
+dotnet workload install android
+dotnet build samples/Companion.Android -c Release -p:RuntimeIdentifier=android-arm64
 ```
 
-The generator creates a minimal `GameAdapter.cs`, app entry point, pinned package
-references and a local feed config. It refuses to overwrite an existing folder.
-No shared source is copied into the game. A shared fix becomes available to every
-consumer by updating its tested package version.
+If SDK discovery needs help, pass `-p:AndroidSdkDirectory=...` and
+`-p:JavaSdkDirectory=...`. The signed development APK is in that project's
+`bin/Release/net10.0-android/android-arm64` directory. Release-store signing and
+physical-device certification are the consuming project's responsibility.
 
-The starter can launch an existing native executable with no arguments. Its adapter
-must add that engine's setup, asset checks, native settings translation and session
-arguments before use as a real game integration. Features appear only when declared.
-See [ADAPTER-GUIDE.md](ADAPTER-GUIDE.md) for that boundary and concrete examples.
+## Use it in your game
+
+The shared libraries are ordinary local NuGet packages. They are not on nuget.org
+or GitHub Packages. Pack them first, or use project references while developing:
+
+```sh
+dotnet pack src/Companion.Launcher.Core -c Release -o packages
+dotnet pack src/Companion.Launcher.Avalonia -c Release -o packages
+# Windows Forms consumers also need Companion.Launcher.Windows.
+# Android consumers also need Companion.Launcher.Android (Android workload required).
+python scripts/new_game.py --id my-game --title "My Game" --platform desktop --output ../my-game-launcher
+```
+
+Choose `--platform windows`, `desktop` or `android`. The generator refuses existing
+folders and produces a small adapter with pinned shared-package versions. Configure
+the engine's supported options, asset validation, setup and native launch arguments.
+The Android starter stays disabled until its actual game activity/assets are wired.
+Porting a launcher does not automatically port a game engine or its ROM converter.
+
+Common behavior includes:
+
+- Boolean, integer, choice and text options with validation and Apply/Revert.
+- Separate game, edition, profile and seed settings; stale-write detection.
+- Desktop process launch with structured arguments; Android embedded-activity launch.
+- Optional cancellable setup and quick-save resume, only when the game supplies them.
+- Read-only achievement browsing with earned/locked indicators and counter progress.
+- Compact touch navigation on handhelds and a familiar desktop layout.
+
+[Adapter guide](ADAPTER-GUIDE.md) explains the integration boundary.
+[Architecture](ARCHITECTURE.md) explains persistence and process lifetime.
 
 ## Achievements
 
-The sibling **CompanionAchievements** directory is the separate offline gameplay
-toolkit. It evaluates each game's completed events and commits progress before a
-notification. This launcher reads its schema-v1 catalog/progress JSON without awarding
-or rewriting progress. Each game defines its own goals and popup/sound presentation.
+Use [Companion Achievements](https://github.com/rages4calm/companion-achievements)
+for the gameplay engine: a small C library with per-game JSON catalogs, counters,
+milestones, transactional commits and notification callbacks. The launcher reads
+its catalog/progress schema; it does not award achievements. No accounts or server.
 
-No account, server or RetroAchievements dependency is required. The achievements
-toolkit's C core remains 0.1.0; its authoring/distribution toolkit is 0.2.0.
+## Test
 
-## Existing games and platform scope
+```sh
+dotnet run --project tests/Companion.Launcher.Tests -c Release
+dotnet run --project tests/Companion.Launcher.Portable.Tests -c Release
+python -m unittest discover -s tests -p test_generator.py
+```
 
-EarthBound, Zelda and Secret of the Stars have **not** been migrated or changed.
-Their released save/settings paths and live installations stay as they are. A later
-opt-in migration supplies an adapter for their exact native formats and verifies a
-private install before replacing any launcher. Secret of the Stars remains paused.
+On Windows, `scripts/build.ps1` also checks the original Windows interface and
+builds two independent package consumers. The portable probe renders desktop and
+handheld layouts and tests actual settings, setup and process actions. CI runs
+native checks on Windows, Linux and macOS, plus an Android build. These checks
+are not a real-game playthrough or physical-device testing.
 
-The core targets portable .NET 8. This first GUI host uses Windows Forms; Android,
-Linux and macOS GUI reuse needs a portable host and platform-specific launch/setup
-adapters. Existing cross-platform game launchers are unaffected. The native C
-achievement core is independent of the Windows GUI.
-
-`dist` contains versioned source/package ZIPs and hash receipts after export.
-The source ZIP excludes binaries, build/test data and all game content.
-See [ARCHITECTURE.md](ARCHITECTURE.md) and [PROVENANCE.md](PROVENANCE.md).
+See [contributing](CONTRIBUTING.md), [changelog](CHANGELOG.md) and
+[provenance](PROVENANCE.md). Copyright Carl Prewitt Jr. and contributors.

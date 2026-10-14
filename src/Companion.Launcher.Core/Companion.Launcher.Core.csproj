@@ -3,7 +3,7 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <Version>0.1.0</Version>
+    <Version>0.2.0</Version>
     <PackageId>Companion.Launcher.Core</PackageId>
     <Authors>Carl Prewitt Jr.</Authors>
     <Description>Game-independent Companion launcher contracts, settings and process helpers.</Description>
