@@ -137,7 +137,7 @@ and emit completed gameplay events. The launcher reads progress; it never awards
     if platform != "windows":
         package_refs = '\n'.join(f'    <PackageReference Include="{name}" Version="[{VERSION}]" />' for name in required)
         external = "Avalonia.Android" if platform == "android" else "Avalonia.Desktop"
-        android_properties = f'<SupportedOSPlatformVersion>26.0</SupportedOSPlatformVersion><ApplicationId>org.companion.game_{re.sub("[^a-z0-9]", "_", game_id)}</ApplicationId><ApplicationTitle>{html.escape(title)}</ApplicationTitle><AndroidPackageFormats>apk</AndroidPackageFormats><PublishTrimmed>false</PublishTrimmed><RunAOTCompilation>false</RunAOTCompilation><RuntimeIdentifier Condition="\'$(RuntimeIdentifier)\'==\'\'">android-arm64</RuntimeIdentifier>' if platform == "android" else ""
+        android_properties = f'<SupportedOSPlatformVersion>26.0</SupportedOSPlatformVersion><ApplicationId>org.companion.game_{re.sub("[^a-z0-9]", "_", game_id)}</ApplicationId><ApplicationTitle>{html.escape(title)}</ApplicationTitle><AndroidPackageFormats>apk</AndroidPackageFormats><PublishTrimmed>false</PublishTrimmed><RunAOTCompilation>false</RunAOTCompilation><AndroidEnableMarshalMethods>false</AndroidEnableMarshalMethods><RuntimeIdentifier Condition="\'$(RuntimeIdentifier)\'==\'\'">android-arm64</RuntimeIdentifier>' if platform == "android" else ""
         files["Game.Companion.csproj"] = f'''<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup><OutputType>{"Exe" if platform == "android" else "WinExe"}</OutputType><TargetFramework>{"net10.0-android" if platform == "android" else "net8.0"}</TargetFramework><ImplicitUsings>enable</ImplicitUsings><Nullable>enable</Nullable><RestorePackagesWithLockFile>true</RestorePackagesWithLockFile><AssemblyName>{game_id}.Companion</AssemblyName>{android_properties}</PropertyGroup>
   <ItemGroup>
@@ -204,6 +204,7 @@ public sealed class MainActivity : AvaloniaMainActivity
 [Android.App.Application]
 public sealed class AndroidApp(nint reference, Android.Runtime.JniHandleOwnership ownership) : AvaloniaAndroidApplication<CompanionApp>(reference, ownership)
 {
+    public override void OnCreate() => base.OnCreate();
     protected override AppBuilder CustomizeAppBuilder(AppBuilder builder) => base.CustomizeAppBuilder(builder).WithInterFont();
 }
 

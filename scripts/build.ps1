@@ -48,7 +48,7 @@ try {
         platform = 'Windows'
         coreAndProcessChecks = $coreResult.checks
         nativeAchievementInteropTested = [bool]$AchievementSdk
-        generatorTests = 4
+        generatorTests = 5
         windowsInteractionCases = $interactionResult.cases
         windowsInteractionReport = (Join-Path $interactionOutput 'integration.json')
         demoRenderedPages = $smokeResult.pageCount

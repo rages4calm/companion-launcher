@@ -56,6 +56,7 @@ public sealed class MainActivity : AvaloniaMainActivity
 [global::Android.App.Application]
 public sealed class AndroidApp(nint reference, global::Android.Runtime.JniHandleOwnership ownership) : AvaloniaAndroidApplication<CompanionApp>(reference, ownership)
 {
+    public override void OnCreate() => base.OnCreate();
     protected override AppBuilder CustomizeAppBuilder(AppBuilder builder) => base.CustomizeAppBuilder(builder).WithInterFont();
 }
 

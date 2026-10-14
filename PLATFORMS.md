@@ -29,6 +29,8 @@ The portable host uses Avalonia 12.1.4 and its current native graphics dependenc
 Android 16-KiB page compatibility is checked with the build/emulator; an older
 2.88.9 Skia dependency was rejected during testing because Android showed a
 compatibility warning. The Windows Forms host has no Avalonia dependency.
+The Android sample/starter disable AndroidEnableMarshalMethods to avoid the
+.NET 10 Release JNI callback registration failure with untrimmed assemblies.
 
 ## Data and lifecycle
 

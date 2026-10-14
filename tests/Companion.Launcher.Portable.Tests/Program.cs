@@ -65,13 +65,13 @@ internal static class Program
             Check(receipt.RootElement.GetProperty("arguments").EnumerateArray().Any(value => value.GetString() == "--resume"), "Resume reaches actual process");
         view.Navigate("achievements"); Pump();
         Check(window.GetVisualDescendants().OfType<TextBlock>().Any(text => text.Text == "1 of 3 earned"), "achievement browser uses earned/partial/locked shared data");
-        using (var image = window.CaptureRenderedFrame() ?? throw new Exception("No pixels rendered.")) image.Save(Path.Combine(output, "desktop-achievements.png"));
+        using (var image = window.CaptureRenderedFrame() ?? throw new Exception("No pixels rendered.")) image.Save(Path.Combine(output, "desktop-achievements.png"), new Avalonia.Media.Imaging.PngBitmapEncoderOptions());
         window.Width = 390; window.Height = 760; Pump();
         Check(Control<ComboBox>("navigation").IsVisible, "compact touch navigation shown");
         Check(Control<ComboBox>("navigation").SelectedIndex == view.PageIds.ToList().IndexOf("achievements"), "compact navigation tracks the displayed page");
-        using (var image = window.CaptureRenderedFrame() ?? throw new Exception("No compact pixels rendered.")) image.Save(Path.Combine(output, "mobile-achievements.png"));
+        using (var image = window.CaptureRenderedFrame() ?? throw new Exception("No compact pixels rendered.")) image.Save(Path.Combine(output, "mobile-achievements.png"), new Avalonia.Media.Imaging.PngBitmapEncoderOptions());
         view.Navigate("section:Display"); Pump();
-        using (var image = window.CaptureRenderedFrame()!) image.Save(Path.Combine(output, "mobile-options.png"));
+        using (var image = window.CaptureRenderedFrame()!) image.Save(Path.Combine(output, "mobile-options.png"), new Avalonia.Media.Imaging.PngBitmapEncoderOptions());
         Control<CheckBox>("option:display.integer").IsChecked = true; Pump();
         Check(!view.CanClose, "closing cannot silently lose a draft"); Click("revert"); Check(view.CanClose, "reverted view can close");
         window.Close();

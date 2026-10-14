@@ -20,5 +20,6 @@ The demo's three catalog entries and static progress fixture are synthetic examp
 CompanionAchievements/examples/trail (MIT), included to verify interchange without game
 content. SampleEngine is a newly written process fixture.
 
-No existing game repository, installed launcher, save or asset was modified. No remote
-was created and no package was published as part of this local extraction.
+The initial extraction did not modify an existing game repository, installed launcher,
+save or asset. The shared source is now public at https://github.com/rages4calm/companion-launcher.
+Portable UI and Android activity support are additive; the Windows Forms implementation is retained.

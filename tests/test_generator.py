@@ -40,6 +40,7 @@ class GeneratorTests(unittest.TestCase):
             self.assertNotIn("UseWindowsForms", project)
             if platform == "android":
                 self.assertIn("net10.0-android", project)
+                self.assertIn("<AndroidEnableMarshalMethods>false</AndroidEnableMarshalMethods>", project)
                 self.assertTrue((output / "Properties/AndroidManifest.xml").is_file())
                 self.assertIn("AvaloniaAndroidApplication", (output / "MainActivity.cs").read_text())
                 self.assertIn("Theme.AppCompat.NoActionBar", (output / "Resources/values/styles.xml").read_text())

@@ -44,6 +44,8 @@ def export() -> dict:
     for name in ("Companion.Launcher.Core", "Companion.Launcher.Windows", "Companion.Launcher.Avalonia"):
         package = ROOT / "packages" / f"{name}.{version}.nupkg"
         packages[package.name] = package.read_bytes()
+    android_package = ROOT / "packages" / f"Companion.Launcher.Android.{version}.nupkg"
+    if android_package.is_file(): packages[android_package.name] = android_package.read_bytes()
     package_zip = output / f"CompanionLauncher-{version}-packages.zip"
     archive(package_zip, packages)
     receipt = {"schemaVersion": 1, "launcherVersion": version, "sourceFileCount": len(hashes),

@@ -1,7 +1,7 @@
 # Add a game once, reuse the shared launcher
 
 Run `scripts/new_game.py` after `scripts/build.ps1`. The generated app consumes the
-two local packages with exact versions. The generated `nuget.config` points to this
+appropriate local packages with exact versions. The generated `nuget.config` points to this
 folder's package feed; distribute the feed or configure a real package source on another
 computer. Keep its `packages.lock.json` and use `dotnet restore --locked-mode` in CI.
 The feed config also allows nuget.org for Microsoft framework packs if a newer installed
@@ -83,7 +83,7 @@ than rewriting earned dates, converting saves or moving profile paths.
 
 - EarthBound: native binary/INI settings, Redux assets and seed rules remain in its adapter.
 - Zelda: native INI, soundtrack and networking/campaign rules remain in its adapter.
-- Secret of the Stars: separate native input/setup/state rules remain in its adapter; do not resume its paused work.
+- Other games: native input/setup/state rules remain in their own adapters.
 
 Those games were not edited or migrated by this extraction. A future migration should
 first build a private launcher against copied fixtures, prove settings/save path parity,
