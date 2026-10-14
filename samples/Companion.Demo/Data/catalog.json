@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "gameId": "example-trail",
+  "editionId": "original",
+  "catalogVersion": 1,
+  "title": "Companion Trail (synthetic example)",
+  "achievements": [
+    {"id":"trail.first-win","title":"First Steps","description":"Win one completed encounter.","event":"encounter.won","rule":"counter","target":1},
+    {"id":"trail.three-wins","title":"Finding Your Feet","description":"Win three completed encounters.","event":"encounter.won","rule":"counter","target":3},
+    {"id":"trail.boss","title":"Past the Gate","description":"Defeat the example gatekeeper.","event":"gatekeeper.defeated","rule":"milestone","target":1}
+  ]
+}

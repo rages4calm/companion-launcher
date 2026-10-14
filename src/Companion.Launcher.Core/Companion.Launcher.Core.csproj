@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <Version>0.1.0</Version>
+    <PackageId>Companion.Launcher.Core</PackageId>
+    <Authors>Carl Prewitt Jr.</Authors>
+    <Description>Game-independent Companion launcher contracts, settings and process helpers.</Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+  </PropertyGroup>
+  <ItemGroup><None Include="../../README.md" Pack="true" PackagePath="/" /></ItemGroup>
+</Project>

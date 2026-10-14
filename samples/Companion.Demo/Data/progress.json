@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "gameId": "example-trail",
+  "editionId": "original",
+  "seedId": null,
+  "catalogVersion": 1,
+  "achievements": [
+    {"id":"trail.first-win","progress":1,"unlockedAt":1700000000},
+    {"id":"trail.three-wins","progress":2,"unlockedAt":0},
+    {"id":"trail.boss","progress":0,"unlockedAt":0}
+  ]
+}

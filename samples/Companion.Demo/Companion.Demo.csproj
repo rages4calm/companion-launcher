@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../../src/Companion.Launcher.Windows/Companion.Launcher.Windows.csproj" />
+    <ProjectReference Include="../SampleEngine/SampleEngine.csproj" ReferenceOutputAssembly="false" />
+    <Content Include="Data/*.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+  <Target Name="CopySyntheticEngine" AfterTargets="Build">
+    <ItemGroup><EngineFiles Include="../SampleEngine/bin/$(Configuration)/net8.0/SampleEngine*" /></ItemGroup>
+    <Copy SourceFiles="@(EngineFiles)" DestinationFolder="$(TargetDir)Engine" />
+  </Target>
+</Project>
